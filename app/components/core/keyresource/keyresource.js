@@ -1,15 +1,50 @@
-angular.module('core.keys',['ngResource']).factory('Keys',['$resource','$httpParamSerializerJQLike', function($resource,$httpParamSerializerJQLike){
+angular.module('core.keys', ['ngResource']).factory('Keys', ['$resource', '$httpParamSerializerJQLike', function ($resource, $httpParamSerializerJQLike) {
     // return $resource('components/resources/keys.json')
-    return $resource('http://emrahs.duckdns.org/rpitemp/set_onOff.php?param=totp',
-        {},
-        {
-            create: {
-                method: 'POST',
-                headers: {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},
-                transformRequest: transformUrlEncoded
-            }
+
+    return {
+        restricted: function (token) {
+            token = window.localStorage.getItem('authData');
+            return $resource('http://emrahs.duckdns.org:8080/totp-api/rest/totp',
+                {},
+                {
+                    create: {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                            'Authorization' : 'Basic ' + token
+                        },
+                        transformRequest: transformUrlEncoded
+                    },
+                    query: {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Basic ' + token
+                        },
+                        isArray: true,
+                        credentials: true
+                    },
+                    delete: {
+                        method: 'DELETE',
+                        url: 'http://emrahs.duckdns.org:8080/totp-api/rest/totp/:id',
+                        headers: {
+                            'Content-Type': 'application/json; charset=UTF-8',
+                            'Authorization' : 'Basic ' + token
+                        },
+                        credentials: true
+                    },
+                    put: {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json; charset=UTF-8',
+                            'Authorization' : 'Basic ' + token
+                        },
+                        credentials: true,
+                        isArray: true
+                    }
+                }
+            );
         }
-        );
+    };
 
     function transformUrlEncoded(data) {
         return $httpParamSerializerJQLike(data);

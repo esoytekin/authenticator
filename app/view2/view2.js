@@ -13,11 +13,13 @@ angular.module('myApp.view2', ['ngRoute'])
     controller: 'View2Ctrl'
 })
 
-.controller('View2Ctrl', ['Keys',function(Keys) {
+.controller('View2Ctrl', ['Keys','$rootScope',function(Keys,$rootScope) {
     var totpObj = new TOTP();
     var self = this;
 
 
+    if(!window.localStorage.getItem('user'))
+        window.location.href = "#!/login";
 
     self.save = function(event){
         event.preventDefault();
@@ -35,7 +37,8 @@ angular.module('myApp.view2', ['ngRoute'])
 
             // self.keys = addItem(obj);
 
-            Keys.create(obj, function(response){
+            var authData = window.localStorage.getItem('authData');
+            Keys.restricted(authData).create(obj, function(response){
                 window.location.href="#!/view1";
             });
 
