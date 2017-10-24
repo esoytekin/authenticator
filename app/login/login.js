@@ -16,9 +16,19 @@ angular.module('myApp.login',['ngRoute','core.keys'])
     templateUrl: 'login/login.html',
     controller: 'LoginCtrl'
 })
-.controller('LoginCtrl', ['AuthenticationService',function(AuthenticationService) {
+.controller('LoginCtrl', ['$injector',function($injector) {
+
+    var authenticationService = $injector.get('AuthenticationService');
+    var $location = $injector.get("$location");
+    var $rootScope = $injector.get("$rootScope");
+    var authentication = $injector.get("Authentication");
 
     var self = this;
+
+    self.showLogin = true;
+
+
+    $rootScope.currentPage = 'login';
 
     self.login = function(event) {
         event.preventDefault();
@@ -29,8 +39,26 @@ angular.module('myApp.login',['ngRoute','core.keys'])
             return;
         }
 
-        AuthenticationService.setCredentials(username,password);
-        window.location.href="#!/view1";
+        authenticationService.setCredentials(username,password);
+        $location.path("#!/view1");
+        $rootScope.currentPage = null;
+    };
+
+    self.showRegister = function(){
+        self.showLogin = false;
+    };
+
+    self.register = function(){
+        console.log(self.user);
+        authentication.create(self.user, function successfull(response){
+            AuthenticationService.setCredentials(self.user.lgUsername,self.user.lgPassword);
+            $location.path("#!/view1");
+            $rootScope.currentPage = null;
+
+        }, function error(response){
+            console.log(response);
+
+        });
     }
 
 }]);

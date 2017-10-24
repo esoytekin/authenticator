@@ -66,6 +66,15 @@ body {
     text-align: right;
 }
 
+.otp-options {
+    position: absolute;
+    top: 10%;
+    right: 0;
+    width: 0;
+    height: 90%;
+    background: #222222;
+}
+
 .frm-otp {
     padding-top: 15px;
     padding-bottom: 15px;

@@ -1,0 +1,14 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header col-sm-11">
+            <div class="navbar-brand" >
+                Authentication Wallet v<span app-version></span>
+            </div>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse col-sm-1"  >
+            <ul class="nav navbar-nav navbar-right" ng-show="$ctrl.showLogout">
+                <li class="btn-danger"><a ng-href="javascript://" ng-click="$ctrl.logout()"><span style="color:white" class="glyphicon glyphicon-off" aria-hidden="true" ></span></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>

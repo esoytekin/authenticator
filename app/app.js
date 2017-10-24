@@ -6,10 +6,11 @@ angular.module('myApp', [
     'myApp.view1',
     'myApp.view2',
     'myApp.login',
+    'myApp.footer',
+    'myApp.header',
     'myApp.version',
     'core'
 ]).config(['$locationProvider', '$routeProvider', '$httpProvider', function ($locationProvider, $routeProvider, $httpProvider) {
     $locationProvider.hashPrefix('!');
     $routeProvider.otherwise({redirectTo: '/view1'});
-    $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
 }]);

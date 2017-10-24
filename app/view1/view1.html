@@ -1,4 +1,5 @@
 <div  class="well" >
+    <p ng-show="$ctrl.loading">Retrieving data!</p>
 <div ng-repeat="key in $ctrl.keys" style="margin: 0px auto;position:relative;height: 70px; width: 100%; background-color: #222; margin-bottom: 3px;">
     <div style="position:absolute; top:0; left:0;width: 100%; background-color: #800000;height: 10%; opacity: 0.7;">
     </div>
@@ -14,15 +15,15 @@
     </div>
     <!--<span style="margin-left: 10px; color: #66f; position: absolute; left: 50%; line-height: 70px;">{{key.time}}</span>-->
     <div class="otp-label"><a class="label label-success" href="javascript://" ng-click="$ctrl.copy(key)">{{key.totp}}</a></div>
+    <div class="otp-options"></div>
 </div>
+    <div class="footer" >
+        <div class="input-group-btn">
+            <a class="btn btn-default" ng-href="#!/view2">+</a>
+            <button type="button" class="btn btn-default" ng-class="$ctrl.selected ? '' : 'disabled'" ng-click="$ctrl.delete()">-</button>
+        </div>
+        <div class="input-group-addon" id ="lblInfo" ng-show="$ctrl.showInfoLabel"><div class="label label-info">Copied..{{$ctrl.secs}}</div></div>
+    </div>
 
 </div>
 
-<div class="footer">
-<div class="input-group-btn">
-<a class="btn btn-default" href="#!/view2">+</a>
-<button type="button" class="btn btn-default" ng-class="$ctrl.selected ? '' : 'disabled'" ng-click="$ctrl.delete()">-</button>
-    <button type="button" class="btn btn-danger" ng-click="$ctrl.logout()">Logout</button>
-</div>
-<div class="input-group-addon" id ="lblInfo" ng-show="$ctrl.showInfoLabel"><div class="label label-info">Copied..{{$ctrl.secs}}</div></div>
-</div>

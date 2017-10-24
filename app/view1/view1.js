@@ -14,15 +14,23 @@ angular.module('myApp.view1', ['ngRoute','core.keys'])
     controller: 'View1Ctrl'
 })
 
-.controller('View1Ctrl', ['$interval','$scope','Keys','$http','AuthenticationService','$rootScope',function($interval,$scope,Keys,$http,AuthenticationService, $rootScope) {
+.controller('View1Ctrl', ['$injector' , function($injector) {
+
+    var $interval = $injector.get('$interval');
+    var Keys = $injector.get("Keys");
+    var AuthenticationService = $injector.get("AuthenticationService");
+    var $location = $injector.get("$location");
+
+
     var self = this;
     var totpObj = new TOTP();
 
     if (!window.localStorage.getItem('user'))
-        window.location.href="#!/login";
+        $location.path("#!/login");
 
     var authData = window.localStorage.getItem('authData');
 
+    self.loading = true;
     getFromRemote(self, Keys, totpObj, authData);
 
 
@@ -48,20 +56,13 @@ angular.module('myApp.view1', ['ngRoute','core.keys'])
                 console.log(response);
             });
         });
-        /*
-        var notDeletedItems = self.keys.filter(function(elem,index,self){return !elem.selected;});
-        window.localStorage.setItem("keys",JSON.stringify(notDeletedItems));
-        self.keys = notDeletedItems;
-        if(self.keys.length < 1)
-            window.location.href="#!/view2";
-            */
 
-    }
+    };
 
     self.checked = function(item){
 
         self.selected = self.keys.filter(function(elem,index,self){return elem.selected}).length>0;
-    }
+    };
 
     self.copy = function(item){
 
@@ -87,44 +88,11 @@ angular.module('myApp.view1', ['ngRoute','core.keys'])
 
     };
 
-
-    self.getFromLocalStorage = function() {
-        if (!window.localStorage.getItem("keys")) {
-            Keys.query().$promise.then(function(results){
-                if (results.length < 1){
-                    window.location.href="#!/view2";
-                } else {
-                    window.localStorage.setItem("keys",JSON.stringify(results));
-                    angular.forEach(results,function(result){
-                        result.time = totpObj.getTime();
-                        result.totp = totpObj.getOTP(result.secret);
-
-                    });
-
-                    self.keys= results;
-
-                }
-            });
-
-
-        } else {
-            var elems = window.localStorage.getItem("keys");
-            self.keys = JSON.parse(elems);
-
-            if (self.keys.length < 1)
-            {
-                window.location.href="#!/view2";
-            }else
-                updateKeys(self.keys);
-        }
-
-    };
-
-
     self.logout = function(){
         AuthenticationService.logout();
-        window.location.href="#!/login";
     }
+
+
 
 
 
@@ -141,22 +109,13 @@ var updateKeys = function(keys){
 
         });
 
-}
-
-var addItem = function(obj){
-        var elems = window.localStorage.getItem("keys");
-        var keys = JSON.parse(elems);
-
-        keys.push(obj);
-        window.localStorage.setItem("keys",JSON.stringify(keys));
-        return keys;
-
-
 };
+
 
 var getFromRemote = function(self, Keys, totpObj,authData) {
     Keys.restricted(authData).query().$promise.then(function(results){
-        console.log(results);
+        self.loading = false;
+
         if (results.length < 1){
             window.location.href="#!/view2";
         } else {
@@ -169,9 +128,10 @@ var getFromRemote = function(self, Keys, totpObj,authData) {
 
         }
     }, function error(response){
+
         console.log(response.statusText);
         self.logout();
-        window.location.href="#!/login";
+
     });
 
 };

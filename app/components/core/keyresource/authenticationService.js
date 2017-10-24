@@ -21,6 +21,7 @@ angular.module('core.keys').service('AuthenticationService',['$rootScope',functi
         window.localStorage.removeItem('user');
         window.localStorage.removeItem('authData');
         $rootScope.globals = null;
+        window.location.href="#!/login";
     }
 
 }]);
