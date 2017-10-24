@@ -4,8 +4,10 @@ angular.module('core.keys', ['ngResource']).factory('Keys', ['$resource', '$http
     return {
         restricted: function (token) {
             token = window.localStorage.getItem('authData');
-            return $resource('http://emrahs.duckdns.org:8080/totp-api/rest/totp',
-                {},
+            return $resource('http://emrahs.duckdns.org:8080/totp-api/rest/totp/:id',
+                {
+                    id: '@id'
+                },
                 {
                     create: {
                         method: 'POST',
@@ -25,7 +27,6 @@ angular.module('core.keys', ['ngResource']).factory('Keys', ['$resource', '$http
                     },
                     delete: {
                         method: 'DELETE',
-                        url: 'http://emrahs.duckdns.org:8080/totp-api/rest/totp/:id',
                         headers: {
                             'Content-Type': 'application/json; charset=UTF-8',
                             'Authorization' : 'Basic ' + token
