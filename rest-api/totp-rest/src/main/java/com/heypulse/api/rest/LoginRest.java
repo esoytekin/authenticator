@@ -6,12 +6,10 @@ import com.heypulse.api.rest.entity.User;
 import com.heypulse.api.rest.entity.UserRole;
 import com.heypulse.api.rest.service.HeyPulseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
@@ -25,9 +23,9 @@ public class LoginRest {
     @Autowired
     private HeyPulseService heyPulseService;
 
-    @RequestMapping(value = "/signUp", method = RequestMethod.POST)
-    @ResponseBody
-    public boolean signUp(@ModelAttribute SignElement signElement) {
+    @RequestMapping(method = RequestMethod.POST)
+    @ResponseStatus (value = HttpStatus.OK)
+    public void signUp(@ModelAttribute SignElement signElement) {
         User user = new User ();
         user.setName (signElement.getLgFirstName ());
         user.setSurname (signElement.getLgLastName ());
@@ -46,8 +44,6 @@ public class LoginRest {
         user.setUserRole (userRole);
 
         heyPulseService.saveUser (user);
-
-        return true;
 
     }
 }
