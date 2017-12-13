@@ -30,10 +30,13 @@ angular.module('myApp.view2', ['ngRoute'])
         }
 
         try {
-            totpObj.getOTP(self.txtSecret);
+            var sc = self.txtSecret.replace(new RegExp(" ","g"),"");
+            var site = self.txtSite.replace(new RegExp(" ","g"),"");
+
+            totpObj.getOTP(sc);
 
 
-            var obj = {"site": self.txtSite, "secret":self.txtSecret };
+            var obj = {"site": site, "secret":sc };
 
             // self.keys = addItem(obj);
 

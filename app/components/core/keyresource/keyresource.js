@@ -3,7 +3,6 @@ angular.module('core.keys', ['ngResource']).factory('Keys', ['$resource', '$http
 
     return {
         restricted: function (token) {
-            token = window.localStorage.getItem('authData');
             return $resource('http://emrahs.duckdns.org:8080/totp-api/rest/totp/:id',
                 {
                     id: '@id'

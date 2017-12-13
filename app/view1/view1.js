@@ -1,6 +1,10 @@
 'use strict';
 
-angular.module('myApp.view1', ['ngRoute','core.keys'])
+angular.module('myApp.view1', [
+    'ngRoute',
+    'core.keys',
+    'monospaced.qrcode'
+])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/view1', {
@@ -18,6 +22,7 @@ angular.module('myApp.view1', ['ngRoute','core.keys'])
 
     var $interval = $injector.get('$interval');
     var Keys = $injector.get("Keys");
+    var User = $injector.get("User");
     var AuthenticationService = $injector.get("AuthenticationService");
     var $location = $injector.get("$location");
 
@@ -32,6 +37,7 @@ angular.module('myApp.view1', ['ngRoute','core.keys'])
 
     self.loading = true;
     getFromRemote(self, Keys, totpObj, authData);
+    getUser(self,User, authData);
 
 
 
@@ -78,7 +84,7 @@ angular.module('myApp.view1', ['ngRoute','core.keys'])
         self.showInfoLabel = true;
         var labelTimer = $interval(function(){
             self.secs--;
-            if (self.secs == 0){
+            if (self.secs === 0){
                 self.showInfoLabel = false;
                 $interval.cancel(labelTimer);
 
@@ -90,9 +96,14 @@ angular.module('myApp.view1', ['ngRoute','core.keys'])
 
     self.logout = function(){
         AuthenticationService.logout();
-    }
+    };
 
 
+    self.createQr = function(key) {
+        var email = self.user.email;
+        self.qrString = "otpauth://totp/"+key.site + ":" +email+"?secret=" + key.secret + "&issuer="+key.site;
+        self.key = key;
+    };
 
 
 
@@ -134,6 +145,17 @@ var getFromRemote = function(self, Keys, totpObj,authData) {
 
     });
 
+};
+
+var getUser = function(self, User, authData) {
+  User.restricted(authData).query().$promise.then(function(result){
+      self.loading = false;
+      console.log(result);
+      self.user = result;
+  }, function error(response){
+      console.log(response.statusText);
+      self.logout();
+  });
 };
 
 

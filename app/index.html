@@ -12,7 +12,9 @@
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css" />
   <link rel="stylesheet" href="app.css">
+
   <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
 <body>
@@ -23,7 +25,8 @@
 
   <header></header>
   <div class="container-fluid">
-  <div ng-view>App is loading...</div>
+
+    <div ng-view>App is loading...</div>
   </div>
 
 
@@ -36,11 +39,17 @@
   <script src="bower_components/angular-resource/angular-resource.min.js"></script>
   
   <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="bower_components/qrcode-generator/js/qrcode.js"></script>
+  <script src="bower_components/qrcode-generator/js/qrcode_UTF8.js"></script>
+  <script src="bower_components/angular-qrcode/angular-qrcode.js"></script>
+
   <script src="components/util/sha.js" type="text/javascript" charset="utf-8"></script>
+  <script src="components/util/Base32Util.js" type="text/javascript" charset="utf-8"></script>
   <script src="components/util/totp.js" type="text/javascript" charset="utf-8"></script>
   <script src="app.js"></script>
   <script src="components/core/core.js" type="text/javascript" charset="utf-8"></script>
   <script src="components/core/keyresource/keyresource.js" type="text/javascript" charset="utf-8"></script>
+  <script src="components/core/keyresource/userresource.js" type="text/javascript" charset="utf-8"></script>
   <script src="components/core/keyresource/authenticationService.js" type="text/javascript" charset="utf-8"></script>
   <script src="components/core/keyresource/authenticationResource.js" type="text/javascript" charset="utf-8"></script>
   <script src="view1/view1.js?v=1"></script>

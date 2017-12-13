@@ -34,7 +34,8 @@ TOTP = function() {
         try {
             var epoch = Math.round(new Date().getTime() / 1000.0);
             var time = leftpad(dec2hex(Math.floor(epoch / 30)), 16, "0");
-            var key = base32tohex(secret);
+            // var key = base32tohex(secret);
+            var key = Base32Util._base32tohexUpdated(secret);
 
             var shaObj = new jsSHA("SHA-1", "HEX");
             shaObj.setHMACKey(key, "HEX");
