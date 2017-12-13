@@ -1,5 +1,7 @@
 package com.heypulse.api.rest.entity;
 
+import com.heypulse.api.rest.model.Role;
+
 import javax.persistence.*;
 import java.io.Serializable;
 

@@ -1,10 +1,10 @@
 package com.heypulse.api.rest;
 
-import com.heypulse.api.rest.entity.Role;
-import com.heypulse.api.rest.entity.SignElement;
+import com.heypulse.api.rest.model.Role;
+import com.heypulse.api.rest.model.SignElement;
 import com.heypulse.api.rest.entity.User;
 import com.heypulse.api.rest.entity.UserRole;
-import com.heypulse.api.rest.service.HeyPulseService;
+import com.heypulse.api.rest.service.AppKeyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,7 +21,7 @@ import java.util.Date;
 public class LoginRest {
 
     @Autowired
-    private HeyPulseService heyPulseService;
+    private AppKeyService appKeyService;
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus (value = HttpStatus.OK)
@@ -43,7 +43,8 @@ public class LoginRest {
         userRole.setRole (Role.ROLE_USER);
         user.setUserRole (userRole);
 
-        heyPulseService.saveUser (user);
+        appKeyService.saveUser (user);
 
     }
+
 }

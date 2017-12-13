@@ -1,4 +1,4 @@
-package com.heypulse.api.rest.entity;
+package com.heypulse.api.rest.model;
 
 /**
  * Created by emrahsoytekin on 22.10.2017.

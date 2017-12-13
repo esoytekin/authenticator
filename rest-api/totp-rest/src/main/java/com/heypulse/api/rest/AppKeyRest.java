@@ -3,7 +3,7 @@ package com.heypulse.api.rest;
 import com.google.gson.Gson;
 import com.heypulse.api.rest.entity.AppKey;
 import com.heypulse.api.rest.entity.User;
-import com.heypulse.api.rest.service.HeyPulseService;
+import com.heypulse.api.rest.service.AppKeyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +18,13 @@ import java.util.List;
  */
 @Component
 @RequestMapping("/totp")
-public class HeyPulseRest {
+public class AppKeyRest {
 
 
-    private static final Logger logger = LoggerFactory.getLogger (HeyPulseRest.class);
+    private static final Logger logger = LoggerFactory.getLogger (AppKeyRest.class);
 
     @Autowired
-    private HeyPulseService heyPulseService;
+    private AppKeyService appKeyService;
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
@@ -32,17 +32,25 @@ public class HeyPulseRest {
         String username = SecurityContextHolder.getContext ().getAuthentication ().getName ();
         logger.debug ("incoming appkey request from {}", username);
 
-        List<AppKey> appKeys = heyPulseService.getAppKeysByUsername (username);
+        List<AppKey> appKeys = appKeyService.getAppKeysByUsername (username);
         return appKeys;
+    }
+
+    @RequestMapping(value = "/user",method = RequestMethod.GET)
+    @ResponseBody
+    public User getUserDetails(){
+        String username = SecurityContextHolder.getContext ().getAuthentication ().getName ();
+        User user = appKeyService.getUserByUsername (username);
+        return user;
     }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public AppKey saveAppKey(@ModelAttribute AppKey appKey){
         String username = SecurityContextHolder.getContext ().getAuthentication ().getName ();
-        User user = heyPulseService.getUserByUsername (username);
+        User user = appKeyService.getUserByUsername (username);
         appKey.setUser (user);
-        return heyPulseService.saveAppKey (appKey);
+        return appKeyService.saveAppKey (appKey);
     }
 
     @RequestMapping(method = RequestMethod.PUT)
@@ -51,9 +59,9 @@ public class HeyPulseRest {
         Gson gson = new Gson ();
         AppKey appKey = gson.fromJson (json, AppKey.class);
         String username = SecurityContextHolder.getContext ().getAuthentication ().getName ();
-        User user = heyPulseService.getUserByUsername (username);
+        User user = appKeyService.getUserByUsername (username);
         appKey.setUser (user);
-        return heyPulseService.updateAppKey (appKey);
+        return appKeyService.updateAppKey (appKey);
     }
 
     @RequestMapping(value = "/{idParam}",method = RequestMethod.DELETE)
@@ -61,6 +69,6 @@ public class HeyPulseRest {
     public boolean deleteAppKey(@PathVariable("idParam") long idParam) {
         AppKey appKey = new AppKey ();
         appKey.setId (idParam);
-        return heyPulseService.deleteAppKey (appKey);
+        return appKeyService.deleteAppKey (appKey);
     }
 }

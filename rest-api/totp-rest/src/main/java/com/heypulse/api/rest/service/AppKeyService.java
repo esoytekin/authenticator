@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by emrahsoytekin on 22.10.2017.
  */
-public interface HeyPulseService {
+public interface AppKeyService {
     void saveUser(User user);
 
     User getUserByUsername(String username);
