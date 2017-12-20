@@ -3,7 +3,7 @@ angular.module('core.user', ['ngResource']).factory('User', ['$resource', '$http
 
     return {
         restricted: function (token) {
-            return $resource('http://localhost:8080/totp-api/rest/totp/user/:id',
+            return $resource('http://emrahs.duckdns.org:8080/totp-api/rest/user/:id',
                 {
                     id: '@id'
                 },

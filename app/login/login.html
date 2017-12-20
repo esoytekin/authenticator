@@ -7,6 +7,18 @@
             <button type="submit"  class="btn btn-default" ng-click="$ctrl.login($event)">Login</button>
             <button class="btn btn-default" ng-click="$ctrl.showLogin = false; event.preventDefault();">Register</button>
         </div>
+        <hr />
+        <div class="input-group-btn">
+            <!--<img src="../images/sign-in-with-twitter-gray.png" />-->
+        </div>
+        <!--<div class="g-signin2" data-onsuccess="onSignIn"></div>-->
+        <!-- HTML for render Google Sign-In button -->
+        <div id="gSignIn"></div>
+        <!-- HTML for displaying user details -->
+        <div class="userContent"></div>
+        <!--<span id="googleSignIn">-->
+            <!--<span id="signInButton"> </span>-->
+        <!--</span>-->
     </form>
     <form class="form"  ng-show="!$ctrl.showLogin">
         <p>Register new user</p>

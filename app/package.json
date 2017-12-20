@@ -1,7 +1,10 @@
 {
-  "name": "OTP Manager",
+  "name": "Authentication Wallet",
   "version": "0.0.1",
   "main": "main.js",
+  "scripts" : {
+    "postinstall" : "electron-packager . 'TOTP' --icon  './totp.icns' --platform win32 --overwrite"
+  },
   "devDependencies": {
     "electron": "^1.6.8"
   }

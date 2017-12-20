@@ -20,8 +20,12 @@ angular.module('core.keys').service('AuthenticationService',['$rootScope',functi
     this.logout = function logout(){
         window.localStorage.removeItem('user');
         window.localStorage.removeItem('authData');
+        if ($rootScope.globals.google) {
+            signOut();
+        }
         $rootScope.globals = null;
         window.location.href="#!/login";
     }
 
 }]);
+

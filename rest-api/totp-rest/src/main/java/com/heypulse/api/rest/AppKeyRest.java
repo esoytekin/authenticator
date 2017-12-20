@@ -36,13 +36,6 @@ public class AppKeyRest {
         return appKeys;
     }
 
-    @RequestMapping(value = "/user",method = RequestMethod.GET)
-    @ResponseBody
-    public User getUserDetails(){
-        String username = SecurityContextHolder.getContext ().getAuthentication ().getName ();
-        User user = appKeyService.getUserByUsername (username);
-        return user;
-    }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
@@ -71,4 +64,5 @@ public class AppKeyRest {
         appKey.setId (idParam);
         return appKeyService.deleteAppKey (appKey);
     }
+
 }

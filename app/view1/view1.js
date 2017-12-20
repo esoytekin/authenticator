@@ -21,6 +21,7 @@ angular.module('myApp.view1', [
 .controller('View1Ctrl', ['$injector' , function($injector) {
 
     var $interval = $injector.get('$interval');
+    var $rootScope = $injector.get("$rootScope");
     var Keys = $injector.get("Keys");
     var User = $injector.get("User");
     var AuthenticationService = $injector.get("AuthenticationService");
@@ -28,12 +29,24 @@ angular.module('myApp.view1', [
 
 
     var self = this;
+    self.loading = false;
+    self.showInfoLabel = false;
     var totpObj = new TOTP();
 
-    if (!window.localStorage.getItem('user'))
-        $location.path("#!/login");
+    if (!$rootScope.globals){
+        window.location.href = "#!/login";
+        return;
 
-    var authData = window.localStorage.getItem('authData');
+    }
+    var currentUser = $rootScope.globals.currentUser;
+    var authData = currentUser.authData;
+
+    if (!window.localStorage.getItem('user')) {
+        // $location.path("#!/login");
+        window.location.href = "#!/login";
+        return;
+    }
+
 
     self.loading = true;
     getFromRemote(self, Keys, totpObj, authData);
@@ -101,7 +114,7 @@ angular.module('myApp.view1', [
 
     self.createQr = function(key) {
         var email = self.user.email;
-        self.qrString = "otpauth://totp/"+key.site + ":" +email+"?secret=" + key.secret + "&issuer="+key.site;
+        self.qrString = "krontech://totp/"+key.site + ":" +email+"?secret=" + key.secret + "&issuer="+key.site;
         self.key = key;
     };
 
@@ -124,6 +137,8 @@ var updateKeys = function(keys){
 
 
 var getFromRemote = function(self, Keys, totpObj,authData) {
+    if (!window.localStorage.getItem("authData"))
+        return;
     Keys.restricted(authData).query().$promise.then(function(results){
         self.loading = false;
 
@@ -148,6 +163,8 @@ var getFromRemote = function(self, Keys, totpObj,authData) {
 };
 
 var getUser = function(self, User, authData) {
+    if (!window.localStorage.getItem("user"))
+        return;
   User.restricted(authData).query().$promise.then(function(result){
       self.loading = false;
       console.log(result);

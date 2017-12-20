@@ -17,7 +17,11 @@ angular.module('myApp.header',['core.keys'])
 
         self.logout = AuthenticationService.logout;
 
-        self.showLogout = $location.path().indexOf("login") > -1;
+
+
+        // self.showLogout = $location.path().indexOf("login") > -1;
+        self.showLogout = $rootScope.globals;
+
         $rootScope.$watch('currentPage', function (newPage, oldPage){
             self.showLogout = newPage !== 'login';
 
