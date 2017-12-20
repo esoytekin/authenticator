@@ -15,6 +15,8 @@ public interface AppKeyService {
 
     List<AppKey> getAppKeysByUsername(String username);
 
+    AppKey getAppKeyById(long id);
+
     AppKey saveAppKey(AppKey appKey);
 
     AppKey updateAppKey(AppKey appKey);

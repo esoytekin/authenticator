@@ -38,6 +38,12 @@ public class AppKeyServiceImpl implements AppKeyService {
         return appKeyDAO.getByUser (user);
     }
 
+    @Override
+    public AppKey getAppKeyById(long id) {
+        AppKey appKey = appKeyDAO.getById (id);
+        return appKey;
+    }
+
 
     @Override
     public AppKey saveAppKey(AppKey appKey) {

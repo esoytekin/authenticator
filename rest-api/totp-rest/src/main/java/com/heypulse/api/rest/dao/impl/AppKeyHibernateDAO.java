@@ -43,9 +43,11 @@ public class AppKeyHibernateDAO extends SessionHibernateDAO implements AppKeyDAO
 
     @Override
     public List<AppKey> getByUser(User user) {
+
         Criteria criteria = getCurrentSession ().createCriteria (AppKey.class);
         criteria.add (Restrictions.eq ("user", user));
-        criteria.addOrder (Order.asc ("site"));
+        criteria.add (Restrictions.eq ("enabled", true));
+        criteria.addOrder (Order.asc ("id"));
         return criteria.list ();
     }
 }

@@ -2,6 +2,7 @@ package com.heypulse.api.rest.entity;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,6 +27,11 @@ public class AppKey implements Serializable {
 
     @Column(name = "secret")
     private String secret;
+
+    @Column(name = "enabled")
+    @Type(type = "yes_no")
+    @JsonIgnore
+    private boolean enabled;
 
     public Long getId() {
         return id;
@@ -57,5 +63,13 @@ public class AppKey implements Serializable {
 
     public void setSecret(String secret) {
         this.secret = secret;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

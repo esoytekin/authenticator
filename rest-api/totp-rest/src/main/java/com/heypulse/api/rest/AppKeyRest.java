@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletException;
 import java.util.List;
 
 /**
@@ -39,10 +40,14 @@ public class AppKeyRest {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public AppKey saveAppKey(@ModelAttribute AppKey appKey){
+    public AppKey saveAppKey(@ModelAttribute AppKey appKey) throws ServletException {
+        if (appKey.getSecret () == null || appKey.getSite () == null) {
+            throw new ServletException ("Site or secret can not be null!");
+        }
         String username = SecurityContextHolder.getContext ().getAuthentication ().getName ();
         User user = appKeyService.getUserByUsername (username);
         appKey.setUser (user);
+        appKey.setEnabled (true);
         return appKeyService.saveAppKey (appKey);
     }
 
@@ -54,15 +59,20 @@ public class AppKeyRest {
         String username = SecurityContextHolder.getContext ().getAuthentication ().getName ();
         User user = appKeyService.getUserByUsername (username);
         appKey.setUser (user);
+        appKey.setEnabled (true);
         return appKeyService.updateAppKey (appKey);
     }
 
     @RequestMapping(value = "/{idParam}",method = RequestMethod.DELETE)
     @ResponseBody
     public boolean deleteAppKey(@PathVariable("idParam") long idParam) {
-        AppKey appKey = new AppKey ();
-        appKey.setId (idParam);
-        return appKeyService.deleteAppKey (appKey);
+        AppKey appKey = appKeyService.getAppKeyById (idParam);
+        if (appKey != null) {
+            appKey.setEnabled (false);
+            appKeyService.updateAppKey (appKey);
+            return true;
+        }
+        return false;
     }
 
 }
