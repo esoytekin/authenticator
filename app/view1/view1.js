@@ -70,8 +70,12 @@ angular.module('myApp.view1', [
         self.keys = self.keys.filter(function(elem,index,self){
             return !selectedItems.includes(elem);
         });
+
+        var currentUser = $rootScope.globals.currentUser;
+        var authData = currentUser.authData;
+
         angular.forEach(selectedItems,function(item){
-            Keys.restricted().delete({id: item.id}).$promise.then(function(response){
+            Keys.restricted(authData).delete({id: item.id}).$promise.then(function(response){
                 console.log(response);
             });
         });
