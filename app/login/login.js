@@ -52,7 +52,7 @@ angular.module('myApp.login',['ngRoute','core.keys'])
     };
 
     self.register = function(){
-        authentication.create(self.user, function successfull(response){
+        authentication.create(self.user, function successful(response){
             authenticationService.setCredentials(self.user.lgUsername,self.user.lgPassword);
             $location.path("#!/view1");
             $rootScope.currentPage = null;

@@ -18,6 +18,22 @@ angular.module('myApp.view1', [
     controller: 'View1Ctrl'
 })
 
+.directive('focus', function($timeout, $parse) {
+    return {
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.focus);
+            scope.$watch(model, function(value) {
+                if(value === true) {
+                    $timeout(function() {
+                        element[0].focus();
+                    });
+                }
+            });
+        }
+    };
+})
+
+
 .controller('View1Ctrl', ['$injector' , function($injector) {
 
     var $interval = $injector.get('$interval');
@@ -33,10 +49,24 @@ angular.module('myApp.view1', [
     self.showInfoLabel = false;
     var totpObj = new TOTP();
 
-    if (!$rootScope.globals){
-        window.location.href = "#!/login";
-        return;
 
+
+    if (!$rootScope.globals){
+        if (window.localStorage.getItem("user")) {
+            var username = window.localStorage.getItem('user');
+            var auth = window.localStorage.getItem('authData');
+            $rootScope.globals = {
+                currentUser:{
+                    username: username,
+                    authData: auth
+                }
+            };
+
+        } else {
+            window.location.href = "#!/login";
+            return;
+
+        }
     }
     var currentUser = $rootScope.globals.currentUser;
     var authData = currentUser.authData;
@@ -87,15 +117,27 @@ angular.module('myApp.view1', [
         self.selected = self.keys.filter(function(elem,index,self){return elem.selected}).length>0;
     };
 
+    self.keyCopy = function(keyEvent, filtered) {
+        if (keyEvent.which === 13) {
+            if (filtered.length<1)
+                return;
+
+            self.copy(filtered[0]);
+            self.queryFilter = "";
+        }
+    };
+
     self.copy = function(item){
 
 
         var lblInfo;
         if( copyToClipboard(item.totp)) {
-            lblInfo = "Copied.";
+            lblInfo = item.site + " Copied...";
         } else {
-            lblInfo ="Couldn't copy!";
+            lblInfo ="Couldn't copy " + item.site + "!";
         }
+
+        self.lblInfo = lblInfo;
 
         self.secs = 3;
         self.showInfoLabel = true;
@@ -124,7 +166,9 @@ angular.module('myApp.view1', [
 
 
 
+
 }]);
+
 
 var updateKeys = function(keys){
     var totpObj = new TOTP();
@@ -171,7 +215,6 @@ var getUser = function(self, User, authData) {
         return;
   User.restricted(authData).query().$promise.then(function(result){
       self.loading = false;
-      console.log(result);
       self.user = result;
   }, function error(response){
       console.log(response.statusText);
@@ -181,6 +224,9 @@ var getUser = function(self, User, authData) {
 
 
 function copyToClipboard(elem) {
+    if (elem === undefined) {
+        return false;
+    }
 	  // create hidden text element, if it doesn't already exist
     var targetId = "_hiddenCopyText_";
     var origSelectionStart, origSelectionEnd;
