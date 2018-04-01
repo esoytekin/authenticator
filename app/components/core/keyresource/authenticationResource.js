@@ -4,7 +4,7 @@
 angular.module('core.authentication', ['ngResource']).factory('Authentication', ['$resource', '$httpParamSerializerJQLike', function ($resource, $httpParamSerializerJQLike) {
     // return $resource('components/resources/keys.json')
 
-    return $resource('http://emrahs.duckdns.org:8080/totp-api/rest/login',
+    return $resource('http://localhost:8081/login',
         {},
         {
             create: {

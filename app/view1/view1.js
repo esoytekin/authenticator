@@ -79,8 +79,9 @@ angular.module('myApp.view1', [
 
 
     self.loading = true;
-    getFromRemote(self, Keys, totpObj, authData);
-    getUser(self,User, authData);
+    getFromRemote(self, Keys, totpObj, authData, function(){
+        getUser(self,User, authData);
+    });
 
 
 
@@ -174,7 +175,7 @@ var updateKeys = function(keys){
     var totpObj = new TOTP();
         angular.forEach(keys,function(result){
             result.time = totpObj.getTime();
-            result.totp = totpObj.getOTP(result.secret);
+            // result.totp = totpObj.getOTP(result.secret);
             if (result.time === 30){
                 result.totp = totpObj.getOTP(result.secret);
             }
@@ -184,7 +185,7 @@ var updateKeys = function(keys){
 };
 
 
-var getFromRemote = function(self, Keys, totpObj,authData) {
+var getFromRemote = function(self, Keys, totpObj,authData, callback) {
     if (!window.localStorage.getItem("authData"))
         return;
     Keys.restricted(authData).query().$promise.then(function(results){
@@ -199,6 +200,7 @@ var getFromRemote = function(self, Keys, totpObj,authData) {
 
             });
             self.keys= results;
+            callback();
 
         }
     }, function error(response){

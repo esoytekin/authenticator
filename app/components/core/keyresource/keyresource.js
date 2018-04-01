@@ -1,9 +1,13 @@
-angular.module('core.keys', ['ngResource']).factory('Keys', ['$resource', '$httpParamSerializerJQLike', function ($resource, $httpParamSerializerJQLike) {
-    // return $resource('components/resources/keys.json')
+angular.module('core.keys', ['ngResource']).factory('Keys', ['$resource', '$httpParamSerializerJQLike','Properties', function ($resource, $httpParamSerializerJQLike, Properties) {
+
+    Properties.get(function(data) {
+        console.log(data.url);
+        self.url = data.url;
+    });
 
     return {
         restricted: function (token) {
-            return $resource('http://emrahs.duckdns.org:8080/totp-api/rest/totp/:id',
+            return $resource('http://localhost:8081/totp/:id',
                 {
                     id: '@id'
                 },
@@ -22,7 +26,8 @@ angular.module('core.keys', ['ngResource']).factory('Keys', ['$resource', '$http
                             'Authorization': 'Basic ' + token
                         },
                         isArray: true,
-                        credentials: true
+                        credentials: true,
+                        withCredentials: true
                     },
                     delete: {
                         method: 'DELETE',
